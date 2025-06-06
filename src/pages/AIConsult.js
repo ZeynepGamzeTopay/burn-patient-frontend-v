@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+const FLASK_API = process.env.REACT_APP_FLASK_API_URL;
+const BACKEND_API = process.env.REACT_APP_BACKEND_API_URL;
+
 const AIConsult = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -86,7 +89,7 @@ const AIConsult = () => {
 
             if (patient.photoPath) {
                 try {
-                    const photoUrl = `http://localhost:5005/${patient.photoPath.replace(/\\/g, '/')}`;
+                    const photoUrl = `${BACKEND_API}/${patient.photoPath.replace(/\\/g, '/')}`;
                     const response = await fetch(photoUrl);
                     if (!response.ok) throw new Error(`Fotoğraf yüklenirken hata: ${response.status} - ${photoUrl}`);
                     setPhoto(await response.blob());
@@ -99,7 +102,7 @@ const AIConsult = () => {
             }
 
             try {
-                const patientResponse = await fetch(`http://localhost:5005/api/Patient/${patient.patientID}`);
+                const patientResponse = await fetch(`${BACKEND_API}/api/Patient/${patient.patientID}`);
                 if (!patientResponse.ok) throw new Error('Hasta verisi alınamadı');
                 const patientData = await patientResponse.json();
                 setVerifiedStatus(patientData.verified);
@@ -158,7 +161,7 @@ const AIConsult = () => {
             formData.append('height_cm', patient.heightCm.toString());
             formData.append('weight_kg', patient.weightKg.toString());
 
-            const aiResponse = await fetch('http://localhost:5000/predict', {
+            const aiResponse = await fetch(`${FLASK_API}/predict`, {
                 method: 'POST',
                 body: formData
             });
@@ -185,7 +188,7 @@ const AIConsult = () => {
                 BurnPercentage: data.burn_percentage
             };
 
-            const backendResponse = await fetch(`http://localhost:5005/api/Patient/update-ai-analysis/${patient.patientID}`, {
+            const backendResponse = await fetch(`${BACKEND_API}/api/Patient/update-ai-analysis/${patient.patientID}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(backendUpdatePayload)
@@ -217,7 +220,7 @@ const AIConsult = () => {
 
     const confirmVerification = async () => {
         try {
-            const response = await fetch(`http://localhost:5005/api/Patient/update-verified/${patient.patientID}`, {
+            const response = await fetch(`${BACKEND_API}/api/Patient/update-verified/${patient.patientID}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ verified: true })

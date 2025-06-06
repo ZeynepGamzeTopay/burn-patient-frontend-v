@@ -1,7 +1,10 @@
 import axios from "axios";
 
+const FLASK_API = process.env.REACT_APP_FLASK_API_URL;
+const BACKEND_API = process.env.REACT_APP_BACKEND_API_URL;
+
 const api = axios.create({
-  baseURL: "http://localhost:5005",
+  baseURL: `${BACKEND_API}`,
 });
 
 api.interceptors.request.use(

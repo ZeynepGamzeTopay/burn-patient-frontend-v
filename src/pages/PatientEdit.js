@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+const FLASK_API = process.env.REACT_APP_FLASK_API_URL;
+const BACKEND_API = process.env.REACT_APP_BACKEND_API_URL;
+
 const PatientEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -27,7 +30,7 @@ const PatientEdit = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`http://localhost:5005/api/Patient/${id}`);
+        const response = await fetch(`${BACKEND_API}/api/Patient/${id}`);
         if (!response.ok) {
           const errorText = await response.text();
           throw new Error(`Hasta bilgileri alınamadı: ${response.status} - ${errorText}`);
@@ -115,7 +118,7 @@ const PatientEdit = () => {
     console.log("Kaydedilecek hasta verisi (payload):", JSON.stringify(payload));
 
     try {
-      const response = await fetch(`http://localhost:5005/api/Patient/${id}`, {
+      const response = await fetch(`${BACKEND_API}/api/Patient/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

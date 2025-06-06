@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+const FLASK_API = process.env.REACT_APP_FLASK_API_URL;
+const BACKEND_API = process.env.REACT_APP_BACKEND_API_URL;
+
 const AddVisit = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -28,7 +31,7 @@ const AddVisit = () => {
         fileFormData.append("file", file);
 
         try {
-            const response = await fetch("http://localhost:5005/api/visit/upload", {
+            const response = await fetch(`${BACKEND_API}/api/visit/upload`, {
                 method: "POST",
                 body: fileFormData,
             });
@@ -63,7 +66,7 @@ const AddVisit = () => {
 
             console.log("Gönderilen Veri:", requestBody); // İstek verisini konsola yazdır
 
-            const response = await fetch(`http://localhost:5005/api/visit/patient/${id}`, {
+            const response = await fetch(`${BACKEND_API}/api/visit/patient/${id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

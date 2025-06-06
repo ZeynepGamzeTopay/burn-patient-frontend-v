@@ -24,6 +24,8 @@ import AddVisit from "./pages/AddVisit";
 import AIConsult from './pages/AIConsult';
 import MenuPage from "./pages/MenuPage"; // Menü sayfanı ekle
 
+const FLASK_API = process.env.REACT_APP_FLASK_API_URL;
+const BACKEND_API = process.env.REACT_APP_BACKEND_API_URL;
 
 const App = () => {
   const [activeTab, setActiveTab] = useState(1);
@@ -74,7 +76,7 @@ const App = () => {
     }
 
     try {
-      const response = await axios.get("http://localhost:5005/api/doctor/info", {
+      const response = await axios.get(`${BACKEND_API}/api/doctor/info`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

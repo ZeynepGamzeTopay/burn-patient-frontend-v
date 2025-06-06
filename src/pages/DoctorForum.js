@@ -7,6 +7,9 @@ import moment from 'moment';
 import 'moment/locale/tr';
 //import "./DoctorForum.css"; // Make sure this CSS file exists and is correctly linked
 
+const FLASK_API = process.env.REACT_APP_FLASK_API_URL;
+const BACKEND_API = process.env.REACT_APP_BACKEND_API_URL;
+
 moment.locale('tr');
 
 const DoctorForum = () => {
@@ -57,7 +60,7 @@ const DoctorForum = () => {
                 return;
             }
             try {
-                const response = await fetch("http://localhost:5005/api/doctor/info", {
+                const response = await fetch(`${BACKEND_API}/api/doctor/info`, {
                     headers: { "Authorization": `Bearer ${token}` },
                 });
                 if (!response.ok) {
@@ -90,7 +93,7 @@ const DoctorForum = () => {
             return;
         }
         try {
-            const response = await fetch("http://localhost:5005/api/forum/getAll", {
+            const response = await fetch(`${BACKEND_API}/api/forum/getAll`, {
                  headers: { "Authorization": `Bearer ${token}` }
             });
             if (!response.ok) throw new Error(`Forum gönderileri alınamadı: ${response.statusText} (${response.status})`);
@@ -122,7 +125,7 @@ const DoctorForum = () => {
             return;
         }
         try {
-            const response = await fetch(`http://localhost:5005/api/forum/getPost/${id}`, {
+            const response = await fetch(`${BACKEND_API}/api/forum/getPost/${id}`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             if (!response.ok) {
@@ -174,7 +177,7 @@ const DoctorForum = () => {
         if (!currentDoctor) { alert("Doktor bilgisi yüklenemedi, lütfen sayfayı yenileyin veya tekrar giriş yapın."); return; }
 
         try {
-            const response = await fetch(`http://localhost:5005/api/forum/addComment/${postId}`, {
+            const response = await fetch(`${BACKEND_API}/api/forum/addComment/${postId}`, {
                 method: "POST",
                 headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
                 body: JSON.stringify({ content: newCommentContent, doctorName: currentDoctor }),
@@ -210,7 +213,7 @@ const DoctorForum = () => {
 
         let response;
         try {
-            response = await fetch(`http://localhost:5005/api/forum/deletePost/${postId}`, {
+            response = await fetch(`${BACKEND_API}/api/forum/deletePost/${postId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -389,7 +392,7 @@ const DoctorForum = () => {
         formData.append("doctorName", currentDoctor);
 
         try {
-            const response = await fetch(`http://localhost:5005/api/forum/addVoiceRecording/${postId}`,
+            const response = await fetch(`${BACKEND_API}/api/forum/addVoiceRecording/${postId}`,
                 { method: "POST", headers: { "Authorization": `Bearer ${token}` }, body: formData });
             
             if (!response.ok) {
@@ -431,7 +434,7 @@ const DoctorForum = () => {
 
         try {
             const response = await fetch(
-                `http://localhost:5005/api/forum/deleteVoiceRecording/${recordingId}`,
+                `${BACKEND_API}/api/forum/deleteVoiceRecording/${recordingId}`,
                 { method: "DELETE", headers: { "Authorization": `Bearer ${token}` } }
             );
 
@@ -469,7 +472,7 @@ const DoctorForum = () => {
 
         try {
             const response = await fetch(
-                `http://localhost:5005/api/forum/updateComment/${commentId}`,
+                `${BACKEND_API}/api/forum/updateComment/${commentId}`,
                 {
                     method: "PUT",
                     headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
@@ -515,7 +518,7 @@ const DoctorForum = () => {
 
         try {
             const response = await fetch(
-                `http://localhost:5005/api/forum/deleteComment/${commentId}`,
+                `${BACKEND_API}/api/forum/deleteComment/${commentId}`,
                 { method: "DELETE", headers: { "Authorization": `Bearer ${token}` } }
             );
             if (response.status === 403) {
@@ -603,7 +606,7 @@ const DoctorForum = () => {
                                     {p.photoPath && (
                                         <div className="post-image-container" style={styles.postImageContainer}>
                                             <img
-                                                src={`http://localhost:5005/${p.photoPath.startsWith('/') ? p.photoPath.substring(1) : p.photoPath}`}
+                                                src={`${BACKEND_API}/${p.photoPath.startsWith('/') ? p.photoPath.substring(1) : p.photoPath}`}
                                                 alt={`Hasta Fotoğrafı - Post ${p.forumPostID}`}
                                                 className="postImage"
                                                 style={styles.postImage}
@@ -684,7 +687,7 @@ const DoctorForum = () => {
                                                             {moment(recording.createdAt).format('DD MMM, HH:mm')}
                                                         </span>
                                                     )}
-                                                    <audio controls src={`http://localhost:5005/${recording.filePath.startsWith('/') ? recording.filePath.substring(1) : recording.filePath}`} className="audio-player" style={styles.audioPlayerForum} />
+                                                    <audio controls src={`${BACKEND_API}/${recording.filePath.startsWith('/') ? recording.filePath.substring(1) : recording.filePath}`} className="audio-player" style={styles.audioPlayerForum} />
                                                     {currentDoctor === recording.doctorName && (
                                                         <button
                                                             onClick={() => deleteRecording(p.forumPostID, recording.voiceRecordingID)}

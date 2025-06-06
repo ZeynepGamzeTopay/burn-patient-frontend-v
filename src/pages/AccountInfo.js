@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const FLASK_API = process.env.REACT_APP_FLASK_API_URL;
+const BACKEND_API = process.env.REACT_APP_BACKEND_API_URL;
 
 const AccountInfo = () => {
   
@@ -112,7 +114,7 @@ const AccountInfo = () => {
         return;
       }
       try {
-        const response = await fetch("http://localhost:5005/api/doctor/info", {
+        const response = await fetch(`${BACKEND_API}/api/doctor/info`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`,
@@ -163,7 +165,7 @@ const AccountInfo = () => {
     }
   
     try {
-      const response = await fetch(`http://localhost:5005/api/doctor/update/${doctorInfo.doctorID}`, {
+      const response = await fetch(`${BACKEND_API}/api/doctor/update/${doctorInfo.doctorID}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

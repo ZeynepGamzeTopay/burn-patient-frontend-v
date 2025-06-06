@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 //import "./Register.css";
 
+const FLASK_API = process.env.REACT_APP_FLASK_API_URL;
+const BACKEND_API = process.env.REACT_APP_BACKEND_API_URL;
+
 const Register = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -117,7 +120,7 @@ const Register = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5005/api/register", {
+      const response = await fetch(`${BACKEND_API}/api/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

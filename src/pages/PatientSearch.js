@@ -20,12 +20,15 @@ const PatientSearch = () => {
   const [recordsPerPage, setRecordsPerPage] = useState(10);
   const navigate = useNavigate();
 
+  const FLASK_API = process.env.REACT_APP_FLASK_API_URL;
+  const BACKEND_API = process.env.REACT_APP_BACKEND_API_URL;
+
   useEffect(() => {
     const fetchPatients = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch("http://localhost:5005/api/Patient");
+        const response = await fetch(`${BACKEND_API}/api/Patient`);
         if (!response.ok) {
           const errorData = await response.text();
           throw new Error(`Hastalar alınırken bir hata oluştu: ${response.status} - ${errorData || response.statusText}`);
@@ -65,7 +68,7 @@ const PatientSearch = () => {
     const patientToDelete = patients.find(p => p.patientID === patientId);
     if (window.confirm(`"${patientToDelete?.name || 'Bu hasta'}" adlı hastayı silmek istediğinize emin misiniz?`)) {
       try {
-        const response = await fetch(`http://localhost:5005/api/Patient/${patientId}`, {
+        const response = await fetch(`${BACKEND_API}/api/Patient/${patientId}`, {
           method: "DELETE",
         });
         if (!response.ok) {

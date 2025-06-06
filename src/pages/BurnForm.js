@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 //import "./BurnForm.css"; // CSS dosyanızın var olduğundan emin olun
 
+const FLASK_API = process.env.REACT_APP_FLASK_API_URL;
+const BACKEND_API = process.env.REACT_APP_BACKEND_API_URL;
+
 const BurnForm = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -106,7 +109,7 @@ const BurnForm = () => {
 
     try {
       // Backend endpoint'i: /api/Patient
-      const response = await axios.post("http://localhost:5005/api/Patient", submissionData, {
+      const response = await axios.post(`${BACKEND_API}/api/Patient`, submissionData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

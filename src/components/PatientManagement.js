@@ -4,6 +4,9 @@ import { FaArrowLeft } from "react-icons/fa"; // Geri dön ikonu
 import { PatientList } from "./PatientList";
 import axios from "axios";
 
+const FLASK_API = process.env.REACT_APP_FLASK_API_URL;
+const BACKEND_API = process.env.REACT_APP_BACKEND_API_URL;
+
 export function PatientManagement() {
   const [patients, setPatients] = useState([]);
   const navigate = useNavigate(); // Kullanıcıyı yönlendirmek için
@@ -14,7 +17,7 @@ export function PatientManagement() {
 
   const fetchPatients = async () => {
     try {
-      const response = await axios.get("http://localhost:5005/api/Patient");
+      const response = await axios.get(`${BACKEND_API}/api/Patient`);
       setPatients(response.data);
     } catch (error) {
       console.error("Error fetching patients:", error);
@@ -29,7 +32,7 @@ export function PatientManagement() {
     }
 
     try {
-      await axios.put(`http://localhost:5005/api/Patient/${id}`, updatedData);
+      await axios.put(`${BACKEND_API}/api/Patient/${id}`, updatedData);
       alert("Hasta başarıyla güncellendi.");
       fetchPatients(); // Listeyi yenile
     } catch (error) {
@@ -40,7 +43,7 @@ export function PatientManagement() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5005/api/Patient/${id}`);
+      await axios.delete(`${BACKEND_API}/api/Patient/${id}`);
       alert("Hasta başarıyla silindi.");
       setPatients((prev) => prev.filter((patient) => patient.PatientID !== id));
     } catch (error) {

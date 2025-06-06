@@ -2,6 +2,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+const FLASK_API = process.env.REACT_APP_FLASK_API_URL;
+const BACKEND_API = process.env.REACT_APP_BACKEND_API_URL;
+
 const PatientView = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -133,7 +136,7 @@ const PatientView = () => {
                 return;
             }
             try {
-                const response = await fetch("http://localhost:5005/api/doctor/info", {
+                const response = await fetch(`${BACKEND_API}/api/doctor/info`, {
                     method: "GET",
                     headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
                 });
@@ -150,19 +153,19 @@ const PatientView = () => {
     const fetchPatientData = async () => {
         if (!id) return;
         try {
-            const patientResponse = await fetch(`http://localhost:5005/api/patient/${id}`);
+            const patientResponse = await fetch(`${BACKEND_API}/api/patient/${id}`);
             if (!patientResponse.ok) throw new Error("Failed to fetch patient data.");
             const patientData = await patientResponse.json();
             setPatient(patientData);
 
             if (patientData && patientData.audioPath) {
-                const fullAudioPath = `http://localhost:5005/${patientData.audioPath}`;
+                const fullAudioPath = `${BACKEND_API}/${patientData.audioPath}`;
                 setAudioSource(fullAudioPath);
             } else {
                 setAudioSource(null);
             }
 
-            const visitsResponse = await fetch(`http://localhost:5005/api/visit/patient/${id}`);
+            const visitsResponse = await fetch(`${BACKEND_API}/api/visit/patient/${id}`);
             if (!visitsResponse.ok) throw new Error("Failed to fetch visit data.");
             const visitsData = await visitsResponse.json();
             setVisits(visitsData);
@@ -256,7 +259,7 @@ const PatientView = () => {
         const formData = new FormData();
         formData.append('audioFile', blob, `hasta_notu.${fileExtension}`);
         try {
-            const response = await fetch(`http://localhost:5005/api/patient/upload-audio/${id}`, {
+            const response = await fetch(`${BACKEND_API}/api/patient/upload-audio/${id}`, {
                 method: 'POST',
                 body: formData,
             });
@@ -274,7 +277,7 @@ const PatientView = () => {
     const handleDeleteAudio = async () => {
         if (!window.confirm("Bu ses kaydını silmek istediğinizden emin misiniz?")) return;
         try {
-            const response = await fetch(`http://localhost:5005/api/patient/delete-audio/${id}`, {
+            const response = await fetch(`${BACKEND_API}/api/patient/delete-audio/${id}`, {
                 method: 'DELETE',
             });
             if (response.ok) {
@@ -302,7 +305,7 @@ const PatientView = () => {
                 PhotoPath: patient.photoPath ,
                 CreatedAt: new Date().toISOString()
             };
-            const response = await fetch("http://localhost:5005/api/forum/addPost", {
+            const response = await fetch(`${BACKEND_API}/api/forum/addPost`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
@@ -369,7 +372,7 @@ const PatientView = () => {
 
                     <div style={styles.imageContainer}>
                         {patient.photoPath ? (
-                            <img src={`http://localhost:5005/${patient.photoPath}`} alt={`${patient.name} Yanık Fotoğrafı`} style={styles.image} />
+                            <img src={`${BACKEND_API}/${patient.photoPath}`} alt={`${patient.name} Yanık Fotoğrafı`} style={styles.image} />
                         ) : (
                             <p style={styles.noImageText}>Hastaya Ait Fotoğraf Yok</p>
                         )}
@@ -418,13 +421,13 @@ const PatientView = () => {
                                         <p style={styles.visitCardText}><strong>Notlar:</strong> {visit.notes || "Yok"}</p>
                                         {visit.photoPath && (
                                             <div style={styles.visitImageContainer}>
-                                                <img src={`http://localhost:5005/${visit.photoPath}`} alt={`Ziyaret ${new Date(visit.visitDate).toLocaleDateString()}`} style={styles.visitImage} />
+                                                <img src={`${BACKEND_API}/${visit.photoPath}`} alt={`Ziyaret ${new Date(visit.visitDate).toLocaleDateString()}`} style={styles.visitImage} />
                                             </div>
                                         )}
                                     </div>
                                     {visit.labResultsFilePath && (
                                         <a
-                                            href={`http://localhost:5005/${visit.labResultsFilePath}`}
+                                            href={`${BACKEND_API}/${visit.labResultsFilePath}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             style={styles.labResultsButton}
