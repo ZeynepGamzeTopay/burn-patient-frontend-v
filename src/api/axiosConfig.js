@@ -5,6 +5,7 @@ const BACKEND_API = process.env.REACT_APP_BACKEND_API_URL;
 
 const api = axios.create({
   baseURL: `${BACKEND_API}`,
+  withCredentials: true,  // Önemli
 });
 
 api.interceptors.request.use(
