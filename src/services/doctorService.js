@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-//const API_BASE_URL = '${BACKEND_API}/api'; // Backend API'nin temel URL'si
+const API_BASE_URL = '${BACKEND_API}/api'; // Backend API'nin temel URL'si
 
 const FLASK_API = process.env.REACT_APP_FLASK_API_URL;
 const BACKEND_API = process.env.REACT_APP_BACKEND_API_URL;
