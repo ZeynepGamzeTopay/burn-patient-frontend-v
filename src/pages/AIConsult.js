@@ -161,6 +161,10 @@ const AIConsult = () => {
             formData.append('height_cm', patient.heightCm.toString());
             formData.append('weight_kg', patient.weightKg.toString());
 
+            for (let pair of formData.entries()) {
+                console.log(pair[0]+ ': ' + pair[1]);
+            }
+
             const aiResponse = await fetch(`${FLASK_API}/predict`, {
                 method: 'POST',
                 body: formData
