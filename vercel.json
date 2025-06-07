@@ -1,5 +1,0 @@
-{
-  "routes": [
-    { "src": "/.*", "status": 403, "headers": { "Retry-After": "3600" } }
-  ]
-}
