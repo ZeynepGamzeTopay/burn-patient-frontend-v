@@ -6,6 +6,7 @@ import { faCheck, faPencilAlt, faTrashAlt, faMicrophone, faStopCircle, faSpinner
 import moment from 'moment';
 import 'moment/locale/tr';
 //import "./DoctorForum.css"; // Make sure this CSS file exists and is correctly linked
+vhugeııbguhcdcd
 
 const FLASK_API = process.env.REACT_APP_FLASK_API_URL;
 const BACKEND_API = process.env.REACT_APP_BACKEND_API_URL;
